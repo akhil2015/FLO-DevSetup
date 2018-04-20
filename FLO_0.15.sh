@@ -34,7 +34,8 @@ echo "server=1" >> $config
 echo "daemon=1" >> $config
 echo "listen=1" >> $config
 echo "txindex=1" >> $config
-randUser=input("Enter your RPC username: ")
+echo "Enter your RPC username: "
+read randUser
 randPass=`< /dev/urandom tr -dc A-Za-z0-9 | head -c30`
 echo $randPass
 echo "rpcuser=$randUser" >> $config
