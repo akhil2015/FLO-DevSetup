@@ -1,4 +1,4 @@
-## WELOCOME TO ElectrumX server INSTALLATION SCRIPT
+## WELOCOME TO Electrum Client INSTALLATION SCRIPT
 ## Ubuntu 17.10 or above required else you need to install python 3.6 
 
 
