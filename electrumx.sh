@@ -77,17 +77,27 @@ openssl x509 -req -days 1825 -in server.csr -signkey server.key -out server.crt
 
 ## Launch ElectrumX as service
 sudo -s
-cp ~/flo-electrumx/contrib/systemd/electrumx.service /lib/systemd/system/
 
 system_user = $(whoami)
 
-##Edit the file to match your setup:
+##Create service file
 service="/lib/systemd/system/electrumx.service"
+sudo rm $service 
+sudo touch $service
 
+echo "[Unit]" >>$service
+echo "Description=Electrumx" >>$service
+echo "After=network.target" >>$service
+
+echo "[Service]" >>$service
+echo "EnvironmentFile=/etc/electrumx.conf" >>$service
 echo "ExecStart=/home/$system_user/flo-electrumx/electrumx_server.py" >> $service
 echo "User=$system_user" >> $service
+echo "LimitNOFILE=8192" >>$service
+echo "TimeoutStopSec=30min" >>$service
 
-## When you're happy with the changes, hit ESC and type :wqa followed by ENTER.
+echo "[Install]" >>$service
+echo "WantedBy=multi-user.target" >>service
 ## Create a configuration file for the server:
 
 config="/etc/electrumx.conf"
@@ -102,7 +112,7 @@ echo "COIN = Flo" >> $config
 echo "DAEMON_URL = http://$RPC_USER:$RPC_PASS@localhost:7313/" >> $config
 echo "DB_DIRECTORY = /home/$system_user/.electrumx/" >> $config
 echo "DB_ENGINE = leveldb" >> $config
-echo "USERNAME = $username" >> $config
+echo "USERNAME = $system_user" >> $config
 echo "ELECTRUMX = /home/$system_user/flo-electrumx/electrumx_server.py" >> $config
 echo "HOST = 0.0.0.0" >> $config
 echo "ANON_LOGS = xx.xx.xx.xx:xxx" >> $config
